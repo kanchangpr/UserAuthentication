@@ -29,16 +29,17 @@ public class UserAuthDao {
 		log.info("["+transactionId+"] Password:  "+password);
 		
 		ResponseBean responseBean = new ResponseBean();
-		UserBean userBean=userRepository.findByUserIdAndPassword(user, password);
+		UserBean userBean=userRepository.findByUserId(user);
 		if(userBean!=null) {
-			if(userBean.getUserId().equalsIgnoreCase(user) && userBean.getPassword().equals(password)) {
-				if(userBean.getIsActive().equalsIgnoreCase("N")) {
+			UserBean userBean1=userRepository.findByUserIdAndPassword(user, password);
+			if(userBean1.getUserId().equalsIgnoreCase(user) && userBean1.getPassword().equals(password)) {
+				if(userBean1.getIsActive().equalsIgnoreCase("N")) {
 					isValid=false;
 					responseBean.setStatus(ApplicationConstants.FAILED);
 					responseBean.setErrorCode(ApplicationConstants.ERROR_CODE_003);
 					responseBean.setErrorMsg(ApplicationConstants.ERROR_MSG_003);
 				}
-				if(userBean.getIsUserLock().equalsIgnoreCase("Y")){
+				if(userBean1.getIsUserLock().equalsIgnoreCase("Y")){
 					isValid=false;
 					responseBean.setStatus(ApplicationConstants.FAILED);
 					responseBean.setErrorCode(ApplicationConstants.ERROR_CODE_004);
